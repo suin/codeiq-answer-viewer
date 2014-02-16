@@ -2,15 +2,14 @@ package main
 
 import (
 	"encoding/csv"
-	"github.com/qiniu/iconv"
+	"github.com/axgle/mahonia"
 	"github.com/suin/ioreplacer"
 	"os"
 )
 
 type Reader struct {
-	file           *os.File
-	csv            *csv.Reader
-	iconvConverter iconv.Iconv
+	file *os.File
+	csv  *csv.Reader
 }
 
 func NewReader(filename string) (this *Reader, err error) {
@@ -22,14 +21,13 @@ func NewReader(filename string) (this *Reader, err error) {
 		return
 	}
 
-	this.iconvConverter, err = iconv.Open("utf-8", "sjis")
+	converter := mahonia.NewDecoder("shiftjis").NewReader(this.file)
 
-	if err != nil {
-		return
-	}
+	// if err != nil {
+	// 	return
+	// }
 
-	iconvReader := iconv.NewReader(this.iconvConverter, this.file, 0)
-	replacer := ioreplacer.NewReader(iconvReader, map[string]string{"\r": "\n", "\r\n": "\n"})
+	replacer := ioreplacer.NewReader(converter, map[string]string{"\r": "\n", "\r\n": "\n"})
 
 	this.csv = csv.NewReader(replacer)
 	this.csv.FieldsPerRecord = -1
@@ -43,5 +41,4 @@ func (this *Reader) Read() (record []string, err error) {
 
 func (this *Reader) Close() {
 	defer this.file.Close()
-	defer this.iconvConverter.Close()
 }
