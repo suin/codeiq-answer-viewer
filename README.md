@@ -5,6 +5,8 @@
 CodeIQ出題者のための解答CSVを閲覧するWebアプリです。
 Goで書かれています。
 
+![](https://raw2.github.com/suin/codeiq-answer-viewer/master/image.png)
+
 ## 使い方
 
 Macで下記コマンドを実行してウェブサーバを立てる
