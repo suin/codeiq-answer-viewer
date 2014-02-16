@@ -23,10 +23,6 @@ func NewReader(filename string) (this *Reader, err error) {
 
 	converter := mahonia.NewDecoder("shiftjis").NewReader(this.file)
 
-	// if err != nil {
-	// 	return
-	// }
-
 	replacer := ioreplacer.NewReader(converter, map[string]string{"\r": "\n", "\r\n": "\n"})
 
 	this.csv = csv.NewReader(replacer)
