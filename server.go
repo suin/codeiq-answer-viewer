@@ -1,7 +1,6 @@
 package main
 
 import (
-	. "./codeiq"
 	"encoding/json"
 	"fmt"
 	"github.com/hoisie/web"

@@ -1,4 +1,4 @@
-package codeiq
+package main
 
 import (
 	"encoding/csv"
