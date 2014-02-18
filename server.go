@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"path/filepath"
 )
 
 var answerRepository = NewOnMemoryAnswerRepository()
@@ -142,14 +143,53 @@ func main() {
 	web.Get("/answers", getAnswerLists)
 	web.Get("/answers/(.*)", getAnswer)
 
-	web.Get("/assets/template.html", func(ctx *web.Context) string {
-		ctx.SetHeader("Content-Type", "text/html; charset=UTF-8", true)
-		return Template
-	})
-	web.Get("/assets/script.js", func(ctx *web.Context) string {
-		ctx.SetHeader("Content-Type", "text/javascript; charset=UTF-8", true)
-		return Script
+	web.Get("/assets/(.*)", func(ctx *web.Context, file string) (contents string) {
+		if len(file) == 0 {
+			ctx.NotFound("File not found")
+			return
+		}
+
+		pwd, _ := os.Getwd()
+		filename := pwd + "/assets/" + file
+
+		if fileExists(filename) == true {
+			// for developments
+			file, err := os.Open(filename)
+
+			if err != nil {
+				ctx.Abort(500, errorToString(err))
+				return
+			}
+
+			ctx.ContentType(filepath.Ext(filename))
+
+			contentsBytes, err := ioutil.ReadAll(file)
+
+			if err != nil {
+				ctx.Abort(500, errorToString(err))
+				return
+			}
+
+			contents = fmt.Sprintf("%s", contentsBytes)
+
+			return
+		}
+
+		if _, ok := assets[file]; ok {
+			ctx.ContentType(filepath.Ext(filename))
+			contents = assets[file]
+
+			return
+		}
+
+		ctx.NotFound("File not found")
+
+		return
 	})
 
 	web.Run("0.0.0.0:51019")
+}
+
+func errorToString(err error) string {
+	return fmt.Sprintf("%s", err)
 }
