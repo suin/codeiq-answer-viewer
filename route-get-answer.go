@@ -7,7 +7,7 @@ import (
 )
 
 func routeGetAnswer(ctx *web.Context, no string) (result string) {
-	ctx.SetHeader("Content-Type", "application/json; charset=UTF-8", true)
+	ctx.ContentType("json")
 	answer, err := answerRepository.NoOf(no)
 
 	if err == AnswerNotFound {

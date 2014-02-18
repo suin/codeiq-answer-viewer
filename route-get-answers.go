@@ -7,7 +7,7 @@ import (
 )
 
 func routeGetAnswers(ctx *web.Context) string {
-	ctx.SetHeader("Content-Type", "application/json; charset=UTF-8", true)
+	ctx.ContentType("json")
 
 	list := []*Answer{}
 
