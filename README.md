@@ -5,7 +5,7 @@
 CodeIQ出題者のための解答CSVを閲覧するWebアプリです。
 Goで書かれています。
 
-![](https://raw2.github.com/suin/codeiq-answer-viewer/master/image.png)
+![](https://raw.githubusercontent.com/suin/codeiq-answer-viewer/master/image.png)
 
 ## 使い方
 
